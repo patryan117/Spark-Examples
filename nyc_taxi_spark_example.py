@@ -1,7 +1,4 @@
 
-# cd /home/pryan/Desktop/spark/bin
-# ./spark-submit  /home/pryan/Desktop/CS777_Assignment_1/driver.py  /home/pryan/Desktop/spark/bin/taxi.csv output1 output2 output3
-
 from __future__ import print_function
 from pyspark import SparkContext
 import sys
