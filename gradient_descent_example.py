@@ -1,5 +1,9 @@
 
 
+# spark submit option
+# cd /home/pryan/Desktop/spark/bin/
+# spark-submit  /home/pryan/Desktop/assignment_3/gradient.py  /home/pryan/Desktop/assignment_3/taxi.csv
+
 
 from __future__ import print_function
 import sys
@@ -9,6 +13,10 @@ from scipy import stats
 import spark
 from pyspark import SparkContext, SQLContext
 from pyspark.sql import *
+
+
+
+
 
 
 
@@ -41,35 +49,71 @@ def main():
     # print(xyrdd.take(5))
 
 
+    def calc_m_hat(xyrdd):
 
-    def calc_m_hat(xyrdd, xrdd, yrdd, n):
+        try:
+            n = xyrdd.count()
+        except ValueError:
+            print("Target is not an rdd")
 
-        # compute m_hat (the predicted slope)
+            try:
+                n = len(xyrdd)
+            except ValueError:
+                print("Target is not a list")
+
         a = n * (xyrdd.map(lambda x: x[0] * x[1]).sum())
-        b = xrdd.sum() * yrdd.sum()
-        c = n * (xrdd.map(lambda x: x ** 2).sum())
-        d = xrdd.sum() ** 2
+        b = xyrdd.map(lambda x: x[0]).sum() * xyrdd.map(lambda x: x[1]).sum()
+        c = n * (xyrdd.map(lambda x: x[0] ** 2).sum())
+        d = xyrdd.map( lambda x : x[0]).sum() ** 2
         m_hat = (a - b) / (c - d)
         return(m_hat)
 
 
-    def calc_b_hat(xyrdd, xrdd, yrdd, n):
+
+    def calc_b_hat(xyrdd):
+
+        try:
+            n = xyrdd.count()
+        except ValueError:
+            print("Target is not an rdd")
+
+            try:
+                n = len(xyrdd)
+            except ValueError:
+                print("Target is not a list")
+
 
         # compute b_hat (the predicted y intercept)
-        a = ((xrdd.map(lambda x: x**2).sum()) *  yrdd.sum())
-        b = xrdd.sum() * (xyrdd.map(lambda x: x[0] * x[1]).sum())
-        c = n * (xrdd.map(lambda x: x**2).sum())
-        d = xrdd.sum() ** 2
+        a = (xyrdd.map(lambda x: x[0]**2).sum()) * xyrdd.map(lambda x: x[1]).sum()
+        b = xyrdd.map(lambda x: x[0]).sum() * (xyrdd.map(lambda x: x[0] * x[1]).sum())
+        c = n * (xyrdd.map(lambda x: x[0] ** 2).sum())
+        d = xyrdd.map( lambda x: x[0]).sum() ** 2
         b_hat =  (a - b) / (c - d)
         return(b_hat)
 
 
-    m_hat = (calc_m_hat(xyrdd, xrdd, yrdd, n))
-    b_hat = (calc_b_hat(xyrdd, xrdd, yrdd, n))
+    # def calc_b_hat(xyrdd, xrdd, yrdd, n):
+    #
+    #     # compute b_hat (the predicted y intercept)
+    #     a = ((xrdd.map(lambda x: x**2).sum()) *  yrdd.sum())
+    #     b = xrdd.sum() * (xyrdd.map(lambda x: x[0] * x[1]).sum())
+    #     c = n * (xrdd.map(lambda x: x**2).sum())
+    #     d = xrdd.sum() ** 2
+    #     b_hat =  (a - b) / (c - d)
+    #     return(b_hat)
 
-    print(m_hat)
-    print(b_hat)
 
+
+
+
+    m_hat = (calc_m_hat(xyrdd))
+    b_hat = (calc_b_hat(xyrdd))
+
+    print("\n")
+    print("Solution 1: ")
+    print("m_hat", m_hat)
+    print("b_hat", b_hat)
+    print("\n")
 
 
 
@@ -95,18 +139,26 @@ def main():
         samp_yrdd = samp_xyrdd.map(lambda x: (x[1]))
         samp_n = samp_xyrdd.count()
 
-        samp_m_hat_list.append(calc_m_hat(samp_xyrdd, samp_xrdd, samp_yrdd, samp_n))
-        samp_b_hat_list.append(calc_b_hat(samp_xyrdd, samp_xrdd, samp_yrdd, samp_n))
+        samp_m_hat_list.append(calc_m_hat(samp_xyrdd))
+        samp_b_hat_list.append(calc_b_hat(samp_xyrdd))
 
 
 
-    # mean_m_hat = (sum(samp_m_hat_list) / len(samp_m_hat_list))
-    # mean_b_hat = (sum(samp_b_hat_list) / len(samp_b_hat_list))
-    #
-    # print("mean m hat: ", mean_m_hat)
-    # print("meah b hat: ", mean_b_hat)
-    #
 
+    print("samp_m_hat_list: ", samp_m_hat_list)
+    print("samp_b_hat_list: ", samp_b_hat_list)
+
+    mean_m_hat = (sum(samp_m_hat_list) / len(samp_m_hat_list))
+    mean_b_hat = (sum(samp_b_hat_list) / len(samp_b_hat_list))
+
+
+
+
+    print("\n")
+    print("Solution 2: ")
+    print("mean m hat: ", mean_m_hat)
+    print("meah b hat: ", mean_b_hat)
+    print("\n")
 
 
 
@@ -146,6 +198,7 @@ def main():
         learning_rate = float(learning_rate)
 
 
+
         while (previous_step_size > precision and iters < max_iterations):
 
 
@@ -169,20 +222,30 @@ def main():
 
 
             if (iters % 1 == 0):
-                print("Iteration: ", iters,  " b_current: ", "{0:.10f}".format(b_current), "m_current: ", "{0:.10f}".format(m_current) )
+                print("Iteration: ", iters,  " b_current: ", "{0:.10f}".format(b_current), "m_current: ", "{0:.10f}".format(m_current),
+                "previous_step_size: ", "{0:.10f}".format(previous_step_size))
+
                 # print("m_gradient :", m_gradient)
                 # print("b_gradient :", b_gradient)
                 # print("precision", precision)
+
+        print("\n")
+        print("Solution 3: ")
+        print("Gradient_m_hat", m_current)
+        print("Gradient_b_hat", b_current)
+        print("\n")
+        print("Solution 3 Check: ")
+        print("Gradient_m_hat_check", calc_m_hat(xyrdd))
+        print("Gradient_b_hat_check", calc_b_hat(xyrdd))
+        print("\n")
+
 
         return(m_current, b_current)
 
 
 
-    batch_gradient_descent(points=xyrdd, m_current=2, b_current=2, learning_rate=0.001, max_iterations = 10000,  precision = 0.000001 )
 
-    # CORRECT ANSWERS:
-    # Beta0:  4.350962228020886
-    # Beta1:  2.6376455350280423
+    batch_gradient_descent(points=xyrdd, m_current=2, b_current=2, learning_rate=0.001, max_iterations = 10000,  precision = 0.000001 )
 
 
 
@@ -193,8 +256,9 @@ def main():
 
 
 #####################################################################################################################
-####### SUPPORTING METHODS ##########################################################################################
 #####################################################################################################################
+#####################################################################################################################
+
 
 
 def isfloat(value):
@@ -225,22 +289,11 @@ def readData(fileName, lowFilter, highFilter):   # why are uppper and lower limi
 
 
 
-#####################################################################################################################
-#####################################################################################################################
-#####################################################################################################################
-
-
 
 
 
 
 if __name__ == "__main__":
     main()
-    # run(sys.argv[1])
-
-
-
-
-
 
 
