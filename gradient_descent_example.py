@@ -1,9 +1,5 @@
 
 
-# spark submit option
-# cd /home/pryan/Desktop/spark/bin/
-# spark-submit  /home/pryan/Desktop/assignment_3/gradient.py  /home/pryan/Desktop/assignment_3/taxi.csv
-
 
 from __future__ import print_function
 import sys
@@ -13,11 +9,6 @@ from scipy import stats
 import spark
 from pyspark import SparkContext, SQLContext
 from pyspark.sql import *
-
-
-
-
-
 
 
 
