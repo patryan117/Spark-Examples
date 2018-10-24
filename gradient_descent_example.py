@@ -83,18 +83,6 @@ def main():
         return(b_hat)
 
 
-    # def calc_b_hat(xyrdd, xrdd, yrdd, n):
-    #
-    #     # compute b_hat (the predicted y intercept)
-    #     a = ((xrdd.map(lambda x: x**2).sum()) *  yrdd.sum())
-    #     b = xrdd.sum() * (xyrdd.map(lambda x: x[0] * x[1]).sum())
-    #     c = n * (xrdd.map(lambda x: x**2).sum())
-    #     d = xrdd.sum() ** 2
-    #     b_hat =  (a - b) / (c - d)
-    #     return(b_hat)
-
-
-
 
 
     m_hat = (calc_m_hat(xyrdd))
