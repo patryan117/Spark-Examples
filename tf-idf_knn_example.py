@@ -9,6 +9,9 @@ from numpy import dot
 from numpy.linalg import norm
 from pyspark import SparkContext
 
+
+
+
 #############################################################################################################################
 # BASIC SPARK TF-IDF FOR WIKIPEDIA, DESIGNED FOR RUNNING ON AWS (EMR) / DATAPROC (GOOGLE CLOUD) 
 #############################################################################################################################
@@ -66,7 +69,6 @@ if __name__ == "__main__":
     def binarizeArray(in_list):
         out_list = np.where(in_list > 0, 1, 0)
         return out_list
-
 
     zeroOrOne = allDocsAsNumpyArrays.map(lambda x: (x[0], binarizeArray(x[1])))
     dfArray = zeroOrOne.reduce(lambda x1, x2: (("", np.add(x1[1], x2[1]))))[1]
