@@ -8,4 +8,4 @@
 - gradient_descent_example.py: An example showing different approaches to optimization for simple linear regression.  (examples include series -based calculations, sampled gradient descent, and batch gradient descent.)  
 
 # Scala Examples
-- wordCount_example.py: A basic Scala RDD map reduce example that returns the frequency of words in a given input string.
+ wordCount_example.sc: A basic Scala RDD map reduce example that returns the frequency of words in a given input string.
