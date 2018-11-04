@@ -1,5 +1,6 @@
 # Spark-Examples:
 
+
 # Python Examples
 - wordCount_example.py: A basic PySpark map reduce example that returns the frequency of words in a given input string.
 - ny_taxi_example: A set of simple map / reduce exercised that show how to manipulate data Spark RDDs.  
