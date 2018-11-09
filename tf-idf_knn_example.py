@@ -42,27 +42,66 @@ if __name__ == "__main__":
 	
     
     sc = SparkContext(appName="Assignment-2")
-
     corpus = sc.textFile(sys.argv[1])
-
     numberOfDocs = corpus.count()
-
     validLines = corpus.filter(lambda x: 'id' in x and 'url=' in x)
+
     keyAndText = validLines.map(lambda x: (x[x.index('id="') + 4: x.index('" url=')], x[x.index('">') + 2:][:-6]))
 
+    
+	
+	
     regex = re.compile('[^a-zA-Z]')
     keyAndListOfWords = keyAndText.map(lambda x: (str(x[0]), regex.sub(' ', x[1]).lower().split()))
+	
+	
+	
 
     allWords = keyAndListOfWords.flatMap(lambda item: item[1])
+
+
+
+
     allCounts = allWords.map(lambda word: (word, 1)).reduceByKey(lambda x, y: x + y)
+	
+	
+	
+	
     topWords = allCounts.top(20000, lambda x:x[1])
+
+
+
+
     twentyK = sc.parallelize(range(20000))
+	
+	
+	
+	
     dictionary = twentyK.map(lambda x: (topWords[x][0], x))
+
+
+
+
     allWords = keyAndListOfWords.flatMap(lambda x: ((j, x[0]) for j in x[1]))
+	
+	
+	
+	
     allDictionaryWords = allWords.join(dictionary)
+
+
+
+
     justDocAndPos = allDictionaryWords.map(lambda x: (x[1][0], x[1][1]))
+	
+	
+	
 
     allDictionaryWordsInEachDoc = justDocAndPos.groupByKey()
+
+
+
+
     allDocsAsNumpyArrays = allDictionaryWordsInEachDoc.map(lambda x: (x[0], buildArray(x[1])))
 
 	
@@ -71,10 +110,41 @@ if __name__ == "__main__":
         return out_list
 
     zeroOrOne = allDocsAsNumpyArrays.map(lambda x: (x[0], binarizeArray(x[1])))
+	
+	
+	
+	
     dfArray = zeroOrOne.reduce(lambda x1, x2: (("", np.add(x1[1], x2[1]))))[1]
+
+
+
+
     multiplier = np.full(20000, numberOfDocs)
+	
+	
+	
+	
     idfArray = np.log(np.divide(multiplier, dfArray))
+
+
+
+
     allDocsAsNumpyArraysTFidf = allDocsAsNumpyArrays.map(lambda x: (x[0], np.multiply(x[1], idfArray)))
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
     def getPrediction(textInput, k):
         myDoc = sc.parallelize(('', textInput))
