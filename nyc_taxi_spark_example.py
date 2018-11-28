@@ -43,9 +43,10 @@ if __name__ == "__main__":
 
     clean_data = parsed_text.filter(correctRows)
 
-
-
+##############################################################################################################
     # QUESTION 1:  TOP OF UNIQUE DRIVERS ID'S PER MEDALLION  (MEDALLION : COUNT OF UNIQUE DRIVER ID'S)
+##############################################################################################################
+
 
     answer_1 = clean_data\
         .map(lambda x: (x[0],x[1]))\
