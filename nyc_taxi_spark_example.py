@@ -56,8 +56,11 @@ if __name__ == "__main__":
         .takeOrdered(10, key=lambda x: -x[1])
 
 
-
+##############################################################################################################
     #  QUESTION 2:  10 BEST DRIVERS IN TERMS OF AVG. PRICE PER MINUTE (DRIVER ID, AVERAGE MONEY PER MINUTE)
+##############################################################################################################
+
+
 
     answer_2 = clean_data.map(lambda x: (x[1], (float(x[16]) , float(x[4])/60))) \
         .reduceByKey(lambda x, y: (x[0] + y[0], x[1] + y[1]))  \
