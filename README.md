@@ -1,6 +1,5 @@
 # Spark-Examples:
 
-
 # Python Examples
 - wordcount_example.py: A basic PySpark map reduce example that returns the frequency of words in a given file.
 - ny_taxi_example.py: A set of simple map / reduce exercised that show how to manipulate and analyze tuple sets in Spark.  
