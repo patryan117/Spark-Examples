@@ -15,7 +15,6 @@ sc = SparkContext(appName="assignment_3")
 
 
 
-
 def main():
 
     
