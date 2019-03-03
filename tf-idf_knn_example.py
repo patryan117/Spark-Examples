@@ -89,7 +89,7 @@ if __name__ == "__main__":
     print(a.collect())
     a.saveAsTextFile(sys.argv[2]+"_answer1")
 
-    b = sc.parallelize(getPrediction('Pear Harbor Bombing', 30), 1)
+    b = sc.parallelize(getPrediction('Pearl Harbor Bombing', 30), 1)
     print(b.collect())
     b.saveAsTextFile(sys.argv[2]+"_answer2")
 
