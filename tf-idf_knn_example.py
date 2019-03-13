@@ -49,10 +49,11 @@ if __name__ == "__main__":
     allWords = keyAndListOfWords.flatMap(lambda item: item[1])
     allCounts = allWords.map(lambda word: (word, 1)).reduceByKey(lambda x, y: x + y)
 	
+    # Create topwords dictionary
     topWords = allCounts.top(20000, lambda x:x[1])
     twentyK = sc.parallelize(range(20000))
     dictionary = twentyK.map(lambda x: (topWords[x][0], x))
-
+	
     allWords = keyAndListOfWords.flatMap(lambda x: ((j, x[0]) for j in x[1]))
     allDictionaryWords = allWords.join(dictionary)
     justDocAndPos = allDictionaryWords.map(lambda x: (x[1][0], x[1][1]))
@@ -84,7 +85,7 @@ if __name__ == "__main__":
         return numTimes.top(1, lambda x: x[1])
 
 
-    # Usage Examples:
+    # Implementation Examples:
     a = sc.parallelize(getPrediction('President Lincoln Hat', 10), 1)
     print(a.collect())
     a.saveAsTextFile(sys.argv[2]+"_answer1")
