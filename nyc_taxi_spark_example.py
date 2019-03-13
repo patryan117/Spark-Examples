@@ -45,7 +45,7 @@ if __name__ == "__main__":
     clean_data = parsed_text.filter(correctRows)
 
 ##############################################################################################################
-    # QUESTION 1:  TOP OF UNIQUE DRIVERS ID'S PER MEDALLION  (MEDALLION : COUNT OF UNIQUE DRIVER ID'S)
+TOP OF UNIQUE DRIVERS ID'S PER MEDALLION  (MEDALLION : COUNT OF UNIQUE DRIVER ID'S)
 ##############################################################################################################
 
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
 
 ##############################################################################################################
-    #  QUESTION 2:  10 BEST DRIVERS IN TERMS OF AVG. PRICE PER MINUTE (DRIVER ID, AVERAGE MONEY PER MINUTE)
+10 BEST DRIVERS IN TERMS OF AVG. PRICE PER MINUTE (DRIVER ID, AVERAGE MONEY PER MINUTE)
 ##############################################################################################################
 
 
